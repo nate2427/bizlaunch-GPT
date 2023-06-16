@@ -1,0 +1,107 @@
+Order details:
+will deliver RESTful microservice that allows to chat with GPT API endpoint while preserving conversation context, 
+
+this current implementation remembers conversation history for different users
+users have regular and premium tier to limit API usage
+
+flask itself is responsible for threading
+
+------------------------------
+put your OpenAI API key into config.py file
+
+how to install:
+pip install flask
+pip install openai
+
+
+start flask daemon as: 
+python3 app.py
+
+
+flask daemon runs on port 5001 with current configuration
+communicate with flask with RESTful call (for example with curl):
+
+API allows for multiple users to use it, 
+each user is identified by user_id and conversation history is stored in separate text file for each user, 
+so GPT remembers context of each conversation.
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+premium user - has unlimited API calls
+
+VM:~/Desktop$ curl -X POST -H "Content-Type: application/json" -d '{"user_id": "user_1", "query": "My name is user_1", "premium": true}' http://localhost:5001/chat
+{
+  "request": "My name is user_1",
+  "response": "Hi user_1, how can I assist you today?"
+}
+
+VM:~/Desktop$ curl -X POST -H "Content-Type: application/json" -d '{"user_id": "user_1", "query": "What is my name?", "premium": true}' http://localhost:5001/chat
+{
+  "request": "What is my name?",
+  "response": "Your name is user_1."
+}
+
+
+
+---
+
+non-premium user, has limited amount of API calls, then gets limited
+
+VM:~/Desktop$ curl -X POST -H "Content-Type: application/json" -d '{"user_id": "user_2", "query": "My name is user_2", "premium": false}' http://localhost:5001/chat
+{
+  "request": "My name is user_2",
+  "response": "Nice to meet you, user_2! How can I assist you today?"
+}
+
+VM:~/Desktop$ curl -X POST -H "Content-Type: application/json" -d '{"user_id": "user_2", "query": "What is my name?", "premium": false}' http://localhost:5001/chat
+{
+  "request": "What is my name?",
+  "response": "Your name is user_2."
+}
+
+VM:~/Desktop$ curl -X POST -H "Content-Type: application/json" -d '{"user_id": "user_2", "query": "What is my name?", "premium": false}' http://localhost:5001/chat
+{
+  "response": "You have reached the maximum number of queries for non-premium users. Please upgrade to premium."
+}
+ 
+------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------   revision   ----------------------------------------------------
+
+client directives:
+Incoming JSON
+
+{ 
+  event_details: “Example event details”,
+  template_input_questions: ["Question1","Question2"]
+}
+
+A JSON should be returned with each question being the key and the GPT response for that question as the value
+
+example call:
+VM:~/Desktop$ curl -X POST -H "Content-Type: application/json" -d '{"user_id": "user_1", "query": "{ \"event_details\": \"This event is about capital cities.\", \"template_input_questions\": [\"What is the capital of France?\",\"What is the capital of Belgium?\"]}", "premium": true}' http://localhost:5001/chat
+"{ \"What is the capital of France?\": \"Paris\", \"What is the capital of Belgium?\": \"Brussels\"}"
+VM:~/Desktop$ 
+
+
+
+
+example call v2:
+VM:~/Desktop/fiverr/nate2427$ curl -X POST -H "Content-Type: application/json" -d '{"user_id": "user_1", "query": "{ \"event_details\": \"Landing web page for luxury space travel to Mars\", \"template_input_questions\": [\"About us\",\"Our rockets\",\"Earth to Mars in 2 days\"]}", "premium": true}' http://localhost:5001/chat
+"{\n  
+  \"About us\": 
+  \"Travel to Mars in luxury and comfort with our innovative space travel program. Our team of expert engineers and space enthusiasts share a common goal of making space travel more accessible and enjoyable for everyone. With years of experience in the industry, we are committed to revolutionizing the way we explore space.\",\n  
+  \"Our rockets\": 
+  \"Our top-of-the-line rockets are designed to provide a smooth and effortless journey to Mars. Equipped with state-of-the-art technology and luxury amenities, our rockets offer unparalleled comfort and safety for our passengers. Each rocket is piloted by a team of skilled astronauts who are trained to deliver an exceptional travel experience.\",\n  
+  \"Earth to Mars in 2 days\": 
+  \"With our groundbreaking technology, you can now travel from Earth to Mars in just 2 days! Say goodbye to long and uncomfortable space journeys and experience the thrill of interplanetary travel like never before. Our streamlined approach to space travel ensures a speedy and efficient journey, minimizing the time spent in space while maximizing comfort and safety.\" 
+\n}"
+VM:~/Desktop/fiverr/nate2427$ 
+
+
+
+
+
+
+
+

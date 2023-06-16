@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>BizLaunch AI Agent</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      .file-upload {
+        display: block;
+        margin: 20px auto;
+      }
+
+      .file-upload input[type="file"] {
+        display: none;
+      }
+
+      .file-upload label {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: #fff;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+
+      .file-upload label:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>BizLaunch AI Agent</h1>
+    <div>
+      <textarea
+        id="event-details"
+        rows="10"
+        placeholder="Describe your event in 2-5 sentences. Include a contact email."
+      ></textarea>
+      <button id="runBot">Run Bot</button>
+    </div>
+    <div id="response-container"></div>
+    <script src="popup.js"></script>
+  </body>
+</html>
