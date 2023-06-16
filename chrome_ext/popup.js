@@ -59,7 +59,7 @@ function scrapeInputsAndRespond(eventDetails) {
   }
 
   //   call http
-  const url = "http://127.0.0.1:5001/chat";
+  const url = "http://streetcodernate.pythonanywhere.com/chat";
   const requestData = {
     user_id: "user_1",
     query: {

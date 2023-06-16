@@ -1,10 +1,14 @@
-POST http://127.0.0.1:5001/chat HTTP/1.1
+POST http://streetcodernate.pythonanywhere.com/chat HTTP/1.1
 content-type: application/json
 
 {
-    "query": "Yes. I have an AI Sales and Marketing agency that does research for companies and finds them high quality b2b leads. I live in ATL and want to connect to businesses around here.",
+    "query": { "event_details": "Landing web page for luxury space travel to Mars", "template_input_questions": ["About us","Our rockets","Earth to Mars in 2 days"]},
     "user_id": "bizlaunch",
     "premium": true
 }
 
 
+###
+
+GET http://streetcodernate.pythonanywhere.com HTTP/1.1
+content-type: application/json
