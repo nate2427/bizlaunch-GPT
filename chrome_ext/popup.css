@@ -1,0 +1,161 @@
+/* Reset default padding and margin */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Apply a border-box sizing to all elements */
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: rgba(0, 0, 0, 0.25); /* Darken out the background */
+  overflow: hidden;
+  width: 48rem;
+  padding: 2rem;
+}
+
+.popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.popup {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+}
+
+h1 {
+  text-align: center;
+}
+
+.description {
+  margin: 15px 0;
+}
+
+.input-container {
+  margin-bottom: 20px;
+}
+
+.input-container label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-container input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.input-container textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.button-container {
+  text-align: center;
+}
+
+.button-container button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button-container button:hover {
+  background-color: #45a049;
+}
+
+.input-container textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-height: 200px; /* Set a maximum height for the textarea */
+  resize: vertical; /* Allow vertical resizing of the textarea */
+}
+
+/* Styles for larger screens */
+.input-container input,
+.input-container textarea {
+  width: 100%;
+}
+
+/* Add loading and status styles */
+#loading {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border: 4px solid #ccc;
+  border-top-color: #4caf50; /* Green color for success */
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+}
+
+#status {
+  margin-top: 10px;
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+#status.success {
+  background-color: #4caf50; /* Green color for success */
+}
+
+#status.error {
+  background-color: #ff0000; /* Red color for error */
+}
+
+/* Create an animation for the loading sign */
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Hide the loading and status elements by default */
+.hidden {
+  display: none !important;
+}
+
+/* Styles for smaller screens */
+@media (max-width: 600px) {
+  .input-container input,
+  .input-container textarea {
+    width: calc(100% - 20px);
+  }
+}

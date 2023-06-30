@@ -1,52 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html style="background-color: transparent">
   <head>
     <meta charset="UTF-8" />
     <title>BizLaunch AI Agent</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-      }
-
-      h1 {
-        text-align: center;
-      }
-
-      .file-upload {
-        display: block;
-        margin: 20px auto;
-      }
-
-      .file-upload input[type="file"] {
-        display: none;
-      }
-
-      .file-upload label {
-        display: inline-block;
-        padding: 10px 20px;
-        background-color: #4caf50;
-        color: #fff;
-        cursor: pointer;
-        border-radius: 4px;
-      }
-
-      .file-upload label:hover {
-        background-color: #45a049;
-      }
-    </style>
+    <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <h1>BizLaunch AI Agent</h1>
-    <div>
-      <textarea
-        id="event-details"
-        rows="10"
-        placeholder="Describe your event in 2-5 sentences. Include a contact email."
-      ></textarea>
-      <button id="runBot">Run Bot</button>
+    <div class="popup">
+      <h1>BizLaunch AI Agent</h1>
+      <div class="description">
+        <h3 style="text-align: center">
+          Describe your event in 2-5 sentences. <br />Include a contact email.
+        </h3>
+      </div>
+      <div class="input-container">
+        <label style="font-weight: 700" for="event-details"
+          >Event Details:</label
+        >
+        <textarea id="event-details" rows="10"></textarea>
+      </div>
+      <div class="input-container">
+        <label style="font-weight: 700" for="contact-email"
+          >Contact Email:</label
+        >
+        <input type="email" id="contact-email" />
+      </div>
+      <div class="button-container">
+        <div
+          style="display: flex; justify-content: center; padding-bottom: 2rem"
+        >
+          <div id="loading" class="hidden"></div>
+        </div>
+        <button id="runBot">Run Bot</button>
+        <div style="display: flex; justify-content: center">
+          <div id="status" class="hidden"></div>
+        </div>
+      </div>
     </div>
-    <div id="response-container"></div>
     <script src="popup.js"></script>
   </body>
 </html>

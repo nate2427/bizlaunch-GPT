@@ -2,13 +2,19 @@
   "manifest_version": 3,
   "name": "Bizlaunch Form Filling Bot",
   "description": "Fills in the form for a client who is using the Bizlaunch to create a Click Funnel request.",
-  "version": "1.0",
+  "version": "0.0.1.0",
   "action": {
     "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "bizlaunch.png",
+    "32": "bizlaunch.png",
+    "48": "bizlaunch.png",
+    "128": "bizlaunch.png"
   },
   "background": {
     "service_worker": "background.js"
   },
   "permissions": ["activeTab", "scripting"],
-  "host_permissions": ["http://*/*", "https://*/*"]
+  "host_permissions": ["https://app.bizlaunch.io/*"]
 }

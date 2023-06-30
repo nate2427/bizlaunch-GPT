@@ -5,33 +5,66 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     responseContainer.innerText = JSON.stringify(message.response);
   }
 });
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  if (message.type === "removeLoading") {
+    const loading = document.getElementById("loading");
+    const status = document.getElementById("status");
+    // remove the loading sign
+    loading.classList.add("hidden");
+    status.classList.remove("hidden");
+    status.innerText = message.response;
+    setTimeout(() => {
+      if (message.response === "Thinking Completed!") {
+        // close the popup
+        chrome.tabs.query(
+          { active: true, currentWindow: true },
+          function (tabs) {
+            chrome.extension.getViews({ type: "popup" })[0].close();
+          }
+        );
+      }
+    }, 1000);
+  }
+});
 
 document.addEventListener("DOMContentLoaded", function () {
   var runBotButton = document.getElementById("runBot");
+  const loading = document.getElementById("loading");
+  const status = document.getElementById("status");
   runBotButton.addEventListener("click", function () {
     var eventDetailsTextarea = document.getElementById("event-details");
+    var contactEmail = document.getElementById("contact-email");
     var eventDetails = eventDetailsTextarea.value.trim();
 
     // Check if event details textarea is empty
-    if (eventDetails === "") {
+    if (eventDetails === "" || contactEmail === "") {
       eventDetailsTextarea.style.borderColor = "red";
+      contactEmail.style.borderColor = "red";
       return;
     }
 
     eventDetailsTextarea.style.borderColor = ""; // Reset border color
+    contactEmail.style.borderColor = "";
+
+    eventDetailsTextarea.value += "\n contact email: " + contactEmail.value;
+
+    // Show the loading sign
+    loading.classList.remove("hidden");
+    // Hide the status
+    status.classList.add("hidden");
 
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       var tab = tabs[0];
       chrome.scripting.executeScript({
         target: { tabId: tab.id },
         function: scrapeInputsAndRespond,
-        args: [eventDetails], // Pass event details as an argument
+        args: [eventDetails, loading, status], // Pass event details as an argument
       });
     });
   });
 });
 
-function scrapeInputsAndRespond(eventDetails) {
+function scrapeInputsAndRespond(eventDetails, loading, status) {
   // This function will be executed in the context of the active tab
   console.log("scrapeInputsAndRespond");
 
@@ -59,7 +92,7 @@ function scrapeInputsAndRespond(eventDetails) {
   }
 
   //   call http
-  const url = "http://streetcodernate.pythonanywhere.com/chat";
+  const url = "https://streetcodernate.pythonanywhere.com/chat";
   const requestData = {
     user_id: "user_1",
     query: {
@@ -75,6 +108,17 @@ function scrapeInputsAndRespond(eventDetails) {
 
   xhr.onreadystatechange = function () {
     if (xhr.readyState === XMLHttpRequest.DONE) {
+      xhr.status === 200
+        ? // Hide the loading sign
+          chrome.runtime.sendMessage({
+            type: "removeLoading",
+            response: "Thinking Completed!",
+          })
+        : chrome.runtime.sendMessage({
+            type: "removeLoading",
+            response: "Error",
+          });
+
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
 
